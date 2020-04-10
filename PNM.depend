@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1586438930 source:d:\gamecuoiki\pnm\main.cpp
+	"SDL_utils.h"
+
+1586404049 source:d:\gamecuoiki\pnm\src\sdl_utils.cpp
+	"SDL_utils.h"
+
+1586404428 d:\gamecuoiki\pnm\include\sdl_utils.h
+	<iostream>
+	<SDL.h>
+
