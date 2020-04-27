@@ -34,12 +34,7 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer,
     SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
-void quitSDL(SDL_Window* window, SDL_Renderer* renderer)
-{
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-}
+
 void waitUntilKeyPressed()
 {
     SDL_Event e;
