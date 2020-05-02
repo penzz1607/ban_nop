@@ -1,17 +1,9 @@
 #include "SDL_utils.h"
-using namespace std;
-
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 450;
-const string title = " chay ngay 13! ";
-
-
-
 SDL_Window*window = NULL;
 SDL_Renderer*renderer = NULL;
-bool initSDL();
-SDL_Texture* load_image(string file_path);
-void quitSDL(SDL_Window* window, SDL_Renderer* renderer);
+SDL_Texture* texture = NULL;
+TTF_Font* font = NULL;
+SDL_Surface* surface = NULL;
 // cột dọc nửa trên màn hình
 struct Sun1 {
     int x; int y;
@@ -19,56 +11,27 @@ struct Sun1 {
     x=_x;
     y=_y;
     }
-    Sun1(){}
     void move(){
-        x-=5;
+        x-=10;
         if(x<=-65){
             x=900;
-            int b=200;
-            while(b>=200){
-                b=rand()%200;
+            int b=110;
+            while(b>=110){
+                b=rand()%110;
             }
             y=b;
           //  cout<<"1: "<<b<<" ";
         }
     }
     void render(SDL_Renderer* renderer){
-        SDL_Texture* hinh = load_image("assets/cot1.png");
+        SDL_Texture* hinh = load_image("assets/cot1.png",renderer);
         SDL_Rect su;
         su.x=x;
         su.y=y;
         su.w=40;
         su.h=90;
         SDL_RenderCopy(renderer, hinh, NULL, &su);
-    }
-};
-// cột ngang
-struct Sun2 {
-    int x; int y;
-    Sun2(int _x, int _y){
-    x=_x;
-    y=_y;
-    }
-    void move(){
-        x-=5;
-        if(x<=-200){
-            x=1200;
-            int a=0;
-            while(a<=50){
-                a=rand()%350 ;
-            }
-            y=a;
-         //   cout<<"2: "<<a<<" ";
-        }
-    }
-    void render(SDL_Renderer* renderer){
-        SDL_Texture* hinh = load_image("assets/cot2.png");
-        SDL_Rect su;
-        su.x=x;
-        su.y=y;
-        su.w=200;
-        su.h=50;
-        SDL_RenderCopy(renderer, hinh, NULL, &su);
+        SDL_DestroyTexture(hinh);
     }
 };
 // cột dọc nửa dưới màn hình
@@ -78,8 +41,9 @@ struct Sun3 {
     x=_x;
     y=_y;
     }
+
     void move(){
-        x-=5;
+        x-=13;
         if (x<=-40){
             x=1000;
             int a=0;
@@ -87,43 +51,98 @@ struct Sun3 {
                 a=rand()% 300;
             }
             y=a;
-           // cout<<"3: "<<a<<endl;
         }
-
     }
     void render(SDL_Renderer* renderer){
-        SDL_Texture* hinh = load_image("assets/cot1.png");
+        SDL_Texture* hinh = load_image("assets/cot1Red.png",renderer);
         SDL_Rect su;
         su.x=x;
         su.y=y;
         su.w=40;
         su.h=90;
         SDL_RenderCopy(renderer, hinh, NULL, &su);
+        SDL_DestroyTexture(hinh);
     }
 };
+// cột ngang
+struct Sun2 {
+    int x; int y;
+    Sun2(int _x, int _y){
+    x=_x;
+    y=_y;
+    }
+
+    void move(){
+        x-=10;
+        if(x<=-200){
+            x=1200;
+            int a=0;
+            while(a<=50){
+                a=rand()%400 ;
+            }
+            y=a;
+         //   cout<<"2: "<<a<<" ";
+        }
+    }
+    void render(SDL_Renderer* renderer){
+        SDL_Texture* hinh = load_image("assets/cot2.png",renderer);
+        SDL_Rect su;
+        su.x=x;
+        su.y=y;
+        su.w=200;
+        su.h=50;
+        SDL_RenderCopy(renderer, hinh, NULL, &su);
+        SDL_DestroyTexture(hinh);
+    }
+};
+struct ten_lua{
+    int x;
+    int y;
+    ten_lua(int _x, int _y): x(_x), y(_y){};
+    void run()
+    {
+        x-=10;
+        if(x<=-30){
+            x=12000;
+        }
+    }
+    void render(SDL_Renderer* renderer){
+        SDL_Texture* hinh = load_image("assets/tenlua.png",renderer);
+        SDL_Rect su;
+        su.x=x;
+        su.y=y;
+        su.w=150;
+        su.h=70;
+        SDL_RenderCopy(renderer, hinh, NULL, &su);
+        SDL_DestroyTexture(hinh);
+    }
+};
+// người chơi
 struct Box{
     int x;
     int y;
-
     Box (int _x,int _y)
     {
         x = _x;
         y = _y;
     }
-    int huong=-5;
+    int huong=-7;
     void render(SDL_Renderer* renderer)
     {
-        SDL_Texture* player = load_image("assets/player.png");
+        SDL_Texture* player;
+        if(huong<0){
+            player= load_image("assets/player.png",renderer);
+        }
+        else player= load_image("assets/pd.png",renderer);
         //if (player != NULL) cout <<"yes";
         SDL_Rect hcn;
         hcn.x = x;
         hcn.y = y;
         hcn.h = 30;
         hcn.w = 30;
-
         SDL_RenderCopy(renderer , player, NULL, &hcn);
+        SDL_DestroyTexture(player);
     }
-
     bool inside(int minx, int miny, int maxx, int maxy){
         return (minx<=x&&miny<=y&& x+30<=maxx&&y+30<=maxy);
     }
@@ -137,98 +156,144 @@ struct Box{
     void move()
     {
         y += huong;
+        if(y<=0) y=SCREEN_HEIGHT-30;
+        else if((y+30)>=SCREEN_HEIGHT) y=0;
     }
     void change(){
        huong=huong*-1;
     }
-
+};
+struct Boss
+{
+    int x; int y;
+    Boss(int _x, int _y): x(_x), y(_y) {};
+    void run (){
+        x-=35;
+        if(x<=-1){
+            x=30000;
+            int a=3;
+            while (a>=3){
+                a=rand()% 2;
+            }
+            y=a*100;
+            cout<<y<<endl;
+        }
+    }
+    void render(SDL_Renderer *renderer){
+        SDL_Texture* hinh = load_image("assets/pow1.png",renderer);
+        SDL_Rect su;
+        su.x=x;
+        su.y=y;
+        su.w=200;
+        su.h=200;
+        SDL_RenderCopy(renderer, hinh, NULL, &su);
+        SDL_DestroyTexture(hinh);
+    }
+};
+struct Warn{
+    int x; int y;
+    Warn(){}
+    void see(SDL_Renderer *renderer){
+        SDL_Texture* hinh = load_image("assets/warn.png",renderer);
+        SDL_Rect su;
+        su.x=x;
+        su.y=y;
+        su.w=60;
+        su.h=60;
+        SDL_RenderCopy(renderer, hinh, NULL, &su);
+        SDL_DestroyTexture(hinh);
+    }
 };
 
-
 // main //
-
-
 int main(int argc, char* argv[])
-{
-
-    if (initSDL() == false) return 0;
-
-    SDL_RenderClear(renderer);
-    SDL_Texture* texture = NULL;
-    texture = load_image("assets/backg.png");
-    SDL_RenderCopy(renderer , texture, NULL, NULL);
-    SDL_DestroyTexture(texture);
+{   initSDL(window, renderer);
     SDL_Event e;
     // khai báo biến
-
-    Box box(70,200);
+    Box box(97,200);
     Sun1 cot1(600, 200);
     Sun3 cot3(800, 350);
     Sun2 cot2(900, 260);
-
+    ten_lua nhen2(12000, 225);
+    Boss pow(1,19000);
+    Warn warn;
     // game chạy
-    int score=0;
-//    int fps=10;
-    while (box.inside(0,0,SCREEN_WIDTH, SCREEN_HEIGHT))
+    bool running= true;
+    while (running)
     {
-    score+=1; cout<<score<<endl;
+    SDL_DestroyTexture(texture);
     // dieu kien cham cot1
-    if(box.cham(cot1.x, cot1.y, cot1.x+34, cot1.y+80)==false){
+    if(box.cham(cot1.x, cot1.y, cot1.x+36, cot1.y+88)==false){
         break;
     }
-
-// dieu kien cham cot2
-
-    if(box.cham(cot2.x, cot2.y, cot2.x+200, cot2.y+42)==false){
+//  dieu kien cham cot2
+    if(box.cham(cot2.x, cot2.y, cot2.x+200, cot2.y+47)==false){
         break;
     }
 // dieu kien cham cot3
-    if(box.cham(cot3.x, cot3.y, cot3.x+34, cot3.y+80)==false){
+    if(box.cham(cot3.x, cot3.y, cot3.x+36, cot3.y+88)==false){
         break;
     }
-
+// điều kiện chạm nhện1
+    if(box.cham(nhen2.x, nhen2.y, nhen2.x+70, nhen2.y+70)==false){
+        break;
+    }
+    if(box.cham(pow.x, pow.y, pow.x+195, pow.y+190)==false){
+        break;
+    }
+// */
     SDL_RenderClear(renderer);
-    SDL_Texture* tex = NULL;
-    tex = load_image("assets/backg.png");
-    SDL_RenderCopy(renderer , tex, NULL, NULL);
-    SDL_DestroyTexture(tex);
+    texture = load_image("assets/bg.png",renderer);
+    SDL_RenderCopy(renderer , texture, NULL, NULL);
+    SDL_DestroyTexture(texture);
     // render
+    box.render(renderer);
 
 
-     box.render(renderer);
-     cot1.render(renderer);
-     cot2.render(renderer);
-     cot3.render(renderer);
-
-
-
+    if(pow.x<=3000)
+    {
+        warn.x=700;
+        warn.y=pow.y;
+        warn.see(renderer);
+        pow.render(renderer);
+        cot1.x=-30;
+        cot2.x=-200;
+        cot3.x=-30;
+        nhen2.x=12000;
+    }
+    else{
+        cot1.render(renderer);
+        cot2.render(renderer);
+        cot3.render(renderer);
+        nhen2.render(renderer);
+    }
     // game play
     box.move();
     cot1.move();
     cot2.move();
     cot3.move();
+    nhen2.run();
+
+    pow.run();
     SDL_RenderPresent(renderer);
-
-
-    //SDL_Delay(0);
-
-
     if(SDL_PollEvent(&e)==0) continue;
         if(e.type == SDL_QUIT) break;
         if(e.type == SDL_KEYDOWN){
             switch (e.key.keysym.sym){
-            case SDLK_ESCAPE:   quitSDL(window, renderer); break;
+            case SDLK_ESCAPE:   running=false; break;
             case SDLK_SPACE:    box.change() ; break;
             default: break;
             }
 
         }
+
+    SDL_RenderClear(renderer);
     }
     SDL_RenderClear(renderer);
     // chay sau khi kết thúc game
-    texture = load_image("assets/end.png");
+    texture = load_image("assets/end.png",renderer);
     SDL_RenderCopy(renderer , texture, NULL, NULL);
-    SDL_Texture * wasted =load_image("assets/wasted.png");
+    SDL_Texture * wasted =load_image("assets/wasted.png",renderer);
     SDL_Rect wa ;
     wa.x=0; wa.y=0;
     wa.w=800; wa.h=450;
@@ -236,60 +301,6 @@ int main(int argc, char* argv[])
     SDL_RenderPresent(renderer);
     waitUntilKeyPressed();
     SDL_RenderClear(renderer);
-    quitSDL(window, renderer);
+    quitSDL(window, renderer, texture);
     return 0;
-}
-
-
-
-
-
-
-
-SDL_Texture* load_image(string file_path)
-
-{
-    SDL_Surface* loadImage = NULL;
-    SDL_Texture* tex = NULL;
-    loadImage = IMG_Load(file_path.c_str());
-    if(loadImage != NULL)
-    {
-        tex = SDL_CreateTextureFromSurface(renderer, loadImage);
-        SDL_FreeSurface(loadImage);
-
-    }
-    return tex;
-}
-bool initSDL()
-{
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    {
-        cout << "Error Init";
-        return false;
-    }
-    window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
-                              SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-
-    if (window == nullptr)
-    {
-        cout << "Error Create window";
-        return false;
-    }
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    if (renderer == nullptr)
-    {
-        cout << "Error Create renderer";
-        return false;
-    }
-
-    return true;
-}
-
-void quitSDL(SDL_Window* window, SDL_Renderer* renderer)
-{
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-
-    SDL_Quit();
 }

@@ -9,12 +9,13 @@
 	<iostream>
 	<SDL.h>
 
-1586440358 source:d:\gamecuoiki\pnm\ban_nop\main.cpp
+1587982206 source:d:\gamecuoiki\pnm\ban_nop\main.cpp
 	"SDL_utils.h"
 
-1586404428 d:\gamecuoiki\pnm\ban_nop\include\sdl_utils.h
+1587982273 d:\gamecuoiki\pnm\ban_nop\include\sdl_utils.h
 	<iostream>
 	<SDL.h>
+	<SDL_image.h>
 
 1586404049 source:d:\gamecuoiki\pnm\ban_nop\src\sdl_utils.cpp
 	"SDL_utils.h"
