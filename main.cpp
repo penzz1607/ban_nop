@@ -95,28 +95,7 @@ struct Sun2 {
         SDL_DestroyTexture(hinh);
     }
 };
-struct ten_lua{
-    int x;
-    int y;
-    ten_lua(int _x, int _y): x(_x), y(_y){};
-    void run()
-    {
-        x-=10;
-        if(x<=-30){
-            x=12000;
-        }
-    }
-    void render(SDL_Renderer* renderer){
-        SDL_Texture* hinh = load_image("assets/tenlua.png",renderer);
-        SDL_Rect su;
-        su.x=x;
-        su.y=y;
-        su.w=150;
-        su.h=70;
-        SDL_RenderCopy(renderer, hinh, NULL, &su);
-        SDL_DestroyTexture(hinh);
-    }
-};
+
 // người chơi
 struct Box{
     int x;
@@ -214,7 +193,7 @@ int main(int argc, char* argv[])
     Sun1 cot1(600, 200);
     Sun3 cot3(800, 350);
     Sun2 cot2(900, 260);
-    ten_lua nhen2(12000, 225);
+
     Boss pow(1,19000);
     Warn warn;
     // game chạy
@@ -235,9 +214,7 @@ int main(int argc, char* argv[])
         break;
     }
 // điều kiện chạm nhện1
-    if(box.cham(nhen2.x, nhen2.y, nhen2.x+70, nhen2.y+70)==false){
-        break;
-    }
+
     if(box.cham(pow.x, pow.y, pow.x+195, pow.y+190)==false){
         break;
     }
@@ -259,21 +236,17 @@ int main(int argc, char* argv[])
         cot1.x=-30;
         cot2.x=-200;
         cot3.x=-30;
-        nhen2.x=12000;
     }
     else{
         cot1.render(renderer);
         cot2.render(renderer);
         cot3.render(renderer);
-        nhen2.render(renderer);
     }
     // game play
     box.move();
     cot1.move();
     cot2.move();
     cot3.move();
-    nhen2.run();
-
     pow.run();
     SDL_RenderPresent(renderer);
     if(SDL_PollEvent(&e)==0) continue;

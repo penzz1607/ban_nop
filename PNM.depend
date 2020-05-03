@@ -12,11 +12,13 @@
 1587982206 source:d:\gamecuoiki\pnm\ban_nop\main.cpp
 	"SDL_utils.h"
 
-1587982273 d:\gamecuoiki\pnm\ban_nop\include\sdl_utils.h
+1588437972 d:\gamecuoiki\pnm\ban_nop\include\sdl_utils.h
 	<iostream>
 	<SDL.h>
+	<cmath>
 	<SDL_image.h>
+	<SDL_ttf.h>
 
-1586404049 source:d:\gamecuoiki\pnm\ban_nop\src\sdl_utils.cpp
+1588437972 source:d:\gamecuoiki\pnm\ban_nop\src\sdl_utils.cpp
 	"SDL_utils.h"
 
