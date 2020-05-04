@@ -18,11 +18,13 @@ void waitUntilKeyPressed()
         SDL_Delay(100);
     }
 }
-void quitSDL(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture * texture)
+void quitSDL(SDL_Window* window, SDL_Renderer* renderer,
+             SDL_Texture * texture)
 {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_DestroyTexture(texture);
+    TTF_Quit();
     SDL_Quit();
 }
 void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
