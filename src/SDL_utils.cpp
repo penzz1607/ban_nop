@@ -25,6 +25,7 @@ void quitSDL(SDL_Window* window, SDL_Renderer* renderer,
     SDL_DestroyWindow(window);
     SDL_DestroyTexture(texture);
     TTF_Quit();
+    Mix_Quit();
     SDL_Quit();
 }
 void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)

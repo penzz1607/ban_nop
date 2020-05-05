@@ -4,6 +4,7 @@ SDL_Renderer*renderer = NULL;
 SDL_Texture* texture = NULL;
 TTF_Font *font = NULL;
 SDL_Surface* surface = NULL;
+
 // cột dọc nửa trên màn hình
 struct Sun1 {
     int x; int y;
@@ -124,7 +125,7 @@ struct Box{
     bool inside(int minx, int miny, int maxx, int maxy){
         return (minx<=x&&miny<=y&& x+30<=maxx&&y+30<=maxy);
     }
-    // kiểm tra xem có cham Sun hay không
+    // kiểm tra xem có cham Sun hay không như thuật toán cửa cô Châu cho
     bool cham (int min_x, int min_y, int max_x, int max_y){
         if (x>=min_x&&x<=max_x&&y>=min_y&&y<=max_y){
                 return false;
@@ -193,12 +194,12 @@ struct Text{
         dai=_dai;
     }
     void render (SDL_Renderer* renderer, TTF_Font* font){
-       SDL_Color col ={243, 156, 18 ,255};
+       SDL_Color col ={0, 255, 0 ,255};
        SDL_Rect chu;
        chu.x = x;
        chu.y = y;
        chu.w = dai;
-       chu.h = 30;
+       chu.h = 35;
        SDL_Surface *sur = TTF_RenderText_Solid(font, word.c_str(),col);
        SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, sur);
        SDL_RenderCopy(renderer, tex, NULL, &chu);
@@ -206,12 +207,28 @@ struct Text{
        SDL_DestroyTexture(tex);
     }
 };
+// cho âm nhạc
+void backgrmusic(){
+    Mix_Music* backgrmusic = NULL;
+    backgrmusic = Mix_LoadMUS( "assets/bgmusic.mp3" );
+    Mix_PlayMusic(backgrmusic,-1);
+    // chạy nhạc vô tận
+}
+void effectmusic(){
+    Mix_Chunk* effect = NULL;
+    effect = Mix_LoadWAV( "assets/effect_sound.mp3" );
+    Mix_PlayChannel(-1,effect,0);
+    //
+}
 // main //
 int main(int argc, char* argv[])
 {
     initSDL(window, renderer);
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
     SDL_Event e;
-    // tạo init ttf
+
+    // tạo init ttf copy từ trang
+    //www.stdio.vn/articles/draw-text-trong-sdl-308
     if (TTF_Init() < 0)
 	{
 		SDL_Log("%s", TTF_GetError());
@@ -223,8 +240,9 @@ int main(int argc, char* argv[])
     SDL_RenderPresent(renderer);
     waitUntilKeyPressed();
     // khai báo biến
+    backgrmusic();
     int score =0;
-    Box box(97,200);
+    Box box(99,400);
     Sun1 cot1(600, 200);
     Sun3 cot3(800, 350);
     Sun2 cot2(900, 260);
@@ -234,20 +252,21 @@ int main(int argc, char* argv[])
     bool running= true;
     while (running)
     {   score ++;
+
     SDL_DestroyTexture(texture);
     // dieu kien cham cot1
-    if(box.cham(cot1.x, cot1.y, cot1.x+36, cot1.y+88)==false){
+    if(box.cham(cot1.x, cot1.y, cot1.x+36, cot1.y+85)==false){
         break;
     }
 //  dieu kien cham cot2
-    if(box.cham(cot2.x, cot2.y, cot2.x+200, cot2.y+47)==false){
+    if(box.cham(cot2.x, cot2.y, cot2.x+195, cot2.y+40)==false){
         break;
     }
 // dieu kien cham cot3
-    if(box.cham(cot3.x, cot3.y, cot3.x+36, cot3.y+88)==false){
+    if(box.cham(cot3.x, cot3.y, cot3.x+36, cot3.y+85)==false){
         break;
     }
-    if(box.cham(pow.x, pow.y, pow.x+195, pow.y+190)==false){
+    if(box.cham(pow.x, pow.y, pow.x+195, pow.y+195)==false){
         break;
     }
 // */
@@ -273,13 +292,11 @@ int main(int argc, char* argv[])
         cot1.x=-30;
         cot2.x=-200;
         cot3.x=-30;
-
     }
     else{
         cot1.render(renderer);
         cot2.render(renderer);
         cot3.render(renderer);
-
     }
     // game play
     box.move();
@@ -299,7 +316,10 @@ int main(int argc, char* argv[])
         }
     SDL_RenderClear(renderer);
     }
-    //waitUntilKeyPressed();
+    Mix_HaltMusic();
+    effectmusic();
+//    waitUntilKeyPressed();
+    SDL_Delay(1000);
     SDL_RenderClear(renderer);
     // chay sau khi kết thúc game
     texture = load_image("assets/end.png",renderer);
@@ -307,9 +327,10 @@ int main(int argc, char* argv[])
     SDL_DestroyTexture(texture);
     // hiển thị điểm
     score/=10;
-    string word_for_gud_bye=" Your score: ";
+    string word_for_gud_bye1=" Your score: ";
     string diem=to_string(score);
-    string finaly=word_for_gud_bye+diem;
+    string smile=" =)";
+    string finaly=word_for_gud_bye1+diem+smile;
     int k=finaly.length();
     Text diem_so(455,420,finaly,k*15);
     diem_so.render(renderer, font);
