@@ -277,12 +277,13 @@ while(true)
     SDL_DestroyTexture(texture);
     // render
     box.render(renderer);
-    // render csore
+    // in điểm trong game
     int diemcnt =score/10;
     string diem=to_string(diemcnt);
     int k=diem.length();
     Text diem_so(705,0,diem,k*15);
     diem_so.render(renderer, font);
+    // xuất hiện boss to
     if(pow.x==3050) effectmusic("assets/nani.mp3");
     if(pow.x<=3000)
     {
