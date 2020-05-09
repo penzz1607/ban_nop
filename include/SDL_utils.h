@@ -19,7 +19,9 @@ void logSDLError(std::ostream& os,
                  const std::string &msg, bool fatal = false);
 void quitSDL(SDL_Window* window, SDL_Renderer* renderer,
               SDL_Texture * texture);
-
-void waitUntilKeyPressed();
 void initSDL(SDL_Window* &window, SDL_Renderer* &renderer);
+void waitUntilKeyPressed();
+void effectmusic(string a);
+void backgrmusic();
+int kt_play(int kt);
 #endif // SDL_UTILS__H

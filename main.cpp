@@ -4,7 +4,6 @@ SDL_Renderer*renderer = NULL;
 SDL_Texture* texture = NULL;
 TTF_Font *font = NULL;
 SDL_Surface* surface = NULL;
-
 // cột dọc nửa trên màn hình
 struct Sun1 {
     int x; int y;
@@ -208,18 +207,8 @@ struct Text{
     }
 };
 // cho âm nhạc
-void backgrmusic(){
-    Mix_Music* backgrmusic = NULL;
-    backgrmusic = Mix_LoadMUS( "assets/bgmusic.mp3" );
-    Mix_PlayMusic(backgrmusic,-1);
-    // chạy nhạc vô tận
-}
-void effectmusic(){
-    Mix_Chunk* effect = NULL;
-    effect = Mix_LoadWAV( "assets/effect_sound.mp3" );
-    Mix_PlayChannel(-1,effect,0);
-    //
-}
+
+
 // main //
 int main(int argc, char* argv[])
 {
@@ -240,33 +229,45 @@ int main(int argc, char* argv[])
     SDL_RenderPresent(renderer);
     waitUntilKeyPressed();
     // khai báo biến
-    backgrmusic();
-    int score =0;
-    Box box(99,400);
+
+    Box box(100,400);
     Sun1 cot1(600, 200);
     Sun3 cot3(800, 350);
     Sun2 cot2(900, 260);
     Boss pow(1,19000);
     Warn warn;
     // game chạy
+    int kt=2;
+while(true)
+{
     bool running= true;
+    backgrmusic();
+    int score =0;
     while (running)
     {   score ++;
 
     SDL_DestroyTexture(texture);
     // dieu kien cham cot1
     if(box.cham(cot1.x, cot1.y, cot1.x+36, cot1.y+85)==false){
+        Mix_HaltMusic();
+        effectmusic("assets/effect_sound.mp3");
         break;
     }
 //  dieu kien cham cot2
-    if(box.cham(cot2.x, cot2.y, cot2.x+195, cot2.y+40)==false){
+    if(box.cham(cot2.x, cot2.y, cot2.x+195, cot2.y+38)==false){
+        Mix_HaltMusic();
+        effectmusic("assets/effect_sound.mp3");
         break;
     }
 // dieu kien cham cot3
     if(box.cham(cot3.x, cot3.y, cot3.x+36, cot3.y+85)==false){
+        Mix_HaltMusic();
+        effectmusic("assets/effect_sound.mp3");
         break;
     }
     if(box.cham(pow.x, pow.y, pow.x+195, pow.y+195)==false){
+        Mix_HaltMusic();
+        effectmusic("assets/effect_sound.mp3");
         break;
     }
 // */
@@ -282,7 +283,7 @@ int main(int argc, char* argv[])
     int k=diem.length();
     Text diem_so(705,0,diem,k*15);
     diem_so.render(renderer, font);
-
+    if(pow.x==3050) effectmusic("assets/nani.mp3");
     if(pow.x<=3000)
     {
         warn.x=700;
@@ -309,18 +310,14 @@ int main(int argc, char* argv[])
         if(e.type == SDL_QUIT) break;
         if(e.type == SDL_KEYDOWN){
             switch (e.key.keysym.sym){
-            case SDLK_ESCAPE:   running=false; break;
             case SDLK_SPACE:    box.change() ; break;
+            case SDLK_p: waitUntilKeyPressed(); break;
+            // ấn p để pause game
             default: break;
             }
         }
     SDL_RenderClear(renderer);
     }
-    Mix_HaltMusic();
-    effectmusic();
-//    waitUntilKeyPressed();
-    SDL_Delay(1000);
-    SDL_RenderClear(renderer);
     // chay sau khi kết thúc game
     texture = load_image("assets/end.png",renderer);
     SDL_RenderCopy(renderer , texture, NULL, NULL);
@@ -335,9 +332,18 @@ int main(int argc, char* argv[])
     Text diem_so(455,420,finaly,k*15);
     diem_so.render(renderer, font);
     SDL_RenderPresent(renderer);
-    waitUntilKeyPressed();
-    SDL_Delay(1500);
+    int a=kt_play(kt);
+    if(a!=0) break;
+    // set lại cacsi vị chí
+        box.y=400;
+        box.huong=-7;
+        cot1.x=-30;
+        cot2.x=-200;
+        cot3.x=-30;
+        pow.x=-1;
+    SDL_Delay(1000);
     SDL_RenderClear(renderer);
+}
     quitSDL(window, renderer, texture);
     return 0;
 }
