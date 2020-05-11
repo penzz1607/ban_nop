@@ -214,6 +214,7 @@ int main(int argc, char* argv[])
 {
     initSDL(window, renderer);
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    Mix_VolumeMusic(59);
     SDL_Event e;
 
     // tạo init ttf copy từ trang
