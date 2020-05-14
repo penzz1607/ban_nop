@@ -52,8 +52,6 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
     //window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED,
     //   SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
     if (window == nullptr) logSDLError(std::cout, "CreateWindow", true);
-
-
     //Khi thông thường chạy với môi trường bình thường ở nhà
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED |
                                               SDL_RENDERER_PRESENTVSYNC);
@@ -66,10 +64,10 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
 }
 SDL_Texture* load_image(string file_path, SDL_Renderer* renderer)
 {
-    SDL_Surface* loadImage = NULL;
-    SDL_Texture* tex = NULL;
-    loadImage = IMG_Load(file_path.c_str());
-    if(loadImage != NULL)
+    SDL_Surface* loadImage= NULL;
+    SDL_Texture* tex= NULL;
+    loadImage= IMG_Load(file_path.c_str());
+    if( loadImage != NULL )
     {
         tex = SDL_CreateTextureFromSurface(renderer, loadImage);
         SDL_FreeSurface(loadImage);

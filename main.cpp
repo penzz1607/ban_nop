@@ -1,220 +1,16 @@
 #include "SDL_utils.h"
+#include <Player.h>
+#include <Enemy.h>
 SDL_Window*window = NULL;
 SDL_Renderer*renderer = NULL;
 SDL_Texture* texture = NULL;
 TTF_Font *font = NULL;
 SDL_Surface* surface = NULL;
-// cột dọc nửa trên màn hình
-struct Sun1 {
-    int x; int y;
-    Sun1(int _x, int _y){
-    x=_x;
-    y=_y;
-    }
-    void move(){
-        x-=10;
-        if(x<=-65){
-            x=900;
-            int b=110;
-            while(b>=110){
-                b=rand()%110;
-            }
-            y=b;
-          //  cout<<"1: "<<b<<" ";
-        }
-    }
-    void render(SDL_Renderer* renderer){
-        SDL_Texture* hinh = load_image("assets/cot1.png",renderer);
-        SDL_Rect sun;
-        sun.x=x;
-        sun.y=y;
-        sun.w=40;
-        sun.h=90;
-        SDL_RenderCopy(renderer, hinh, NULL, &sun);
-        SDL_DestroyTexture(hinh);
-    }
-};
-// cột dọc nửa dưới màn hình
-struct Sun3 {
-    int x; int y;
-    Sun3(int _x, int _y){
-    x=_x;
-    y=_y;
-    }
-
-    void move(){
-        x-=13;
-        if (x<=-40){
-            x=1000;
-            int a=0;
-            while (a<=200){
-                a=rand()% 300;
-            }
-            y=a;
-        }
-    }
-    void render(SDL_Renderer* renderer){
-        SDL_Texture* hinh = load_image("assets/cot1Red.png",renderer);
-        SDL_Rect su;
-        su.x=x;
-        su.y=y;
-        su.w=40;
-        su.h=90;
-        SDL_RenderCopy(renderer, hinh, NULL, &su);
-        SDL_DestroyTexture(hinh);
-    }
-};
-// cột ngang
-struct Sun2 {
-    int x; int y;
-    Sun2(int _x, int _y){
-    x=_x;
-    y=_y;
-    }
-
-    void move(){
-        x-=10;
-        if(x<=-200){
-            x=1200;
-            int a=0;
-            while(a<=50){
-                a=rand()%400 ;
-            }
-            y=a;
-         //   cout<<"2: "<<a<<" ";
-        }
-    }
-    void render(SDL_Renderer* renderer){
-        SDL_Texture* hinh = load_image("assets/cot2.png",renderer);
-        SDL_Rect su;
-        su.x=x;
-        su.y=y;
-        su.w=200;
-        su.h=50;
-        SDL_RenderCopy(renderer, hinh, NULL, &su);
-        SDL_DestroyTexture(hinh);
-    }
-};
-// người chơi
-struct Box{
-    int x;
-    int y;
-    Box (int _x,int _y)
-    {
-        x = _x;
-        y = _y;
-    }
-    int huong=-7;
-    void render(SDL_Renderer* renderer)
-    {
-        SDL_Texture* player;
-        if(huong<0){
-            player= load_image("assets/player.png",renderer);
-        }
-        else player= load_image("assets/pd.png",renderer);
-        //if (player != NULL) cout <<"yes";
-        SDL_Rect hcn;
-        hcn.x = x;
-        hcn.y = y;
-        hcn.h = 30;
-        hcn.w = 30;
-        SDL_RenderCopy(renderer , player, NULL, &hcn);
-        SDL_DestroyTexture(player);
-    }
-    bool inside(int minx, int miny, int maxx, int maxy){
-        return (minx<=x&&miny<=y&& x+30<=maxx&&y+30<=maxy);
-    }
-    // kiểm tra xem có cham Sun hay không như thuật toán cửa cô Châu cho
-    bool cham (int min_x, int min_y, int max_x, int max_y){
-        if (x>=min_x&&x<=max_x&&y>=min_y&&y<=max_y){
-                return false;
-        }
-        else return true;
-    }
-    void move()
-    {
-        y += huong;
-        if(y<=0) y=SCREEN_HEIGHT-30;
-        else if((y+30)>=SCREEN_HEIGHT) y=0;
-    }
-    void change(){
-       huong=huong*-1;
-    }
-};
-struct Boss
-{
-    int x; int y;
-    Boss(int _x, int _y): x(_x), y(_y) {};
-    void run (){
-        x-=35;
-        if(x<=-1){
-            x=30000;
-            int a=3;
-            while (a>=3){
-                a=rand()% 2;
-            }
-            y=a*250;
-        }
-    }
-    void render(SDL_Renderer *renderer){
-        SDL_Texture* hinh = load_image("assets/pow1.png",renderer);
-        SDL_Rect su;
-        su.x=x;
-        su.y=y;
-        su.w=200;
-        su.h=200;
-        SDL_RenderCopy(renderer, hinh, NULL, &su);
-        SDL_DestroyTexture(hinh);
-    }
-};
-struct Warn{
-    int x; int y;
-    Warn(){}
-    void see(SDL_Renderer *renderer){
-        SDL_Texture* hinh = load_image("assets/warn.png",renderer);
-        SDL_Rect su;
-        su.x=x;
-        su.y=y;
-        su.w=60;
-        su.h=60;
-        SDL_RenderCopy(renderer, hinh, NULL, &su);
-        SDL_DestroyTexture(hinh);
-    }
-};
-struct Text{
-    string word;
-    int x;
-    int y;
-    int dai;
-    Text (int _x, int _y, string _word, int _dai){
-        x=_x;
-        y=_y;
-        word=_word;
-        dai=_dai;
-    }
-    void render (SDL_Renderer* renderer, TTF_Font* font){
-       SDL_Color col ={0, 255, 0 ,255};
-       SDL_Rect chu;
-       chu.x = x;
-       chu.y = y;
-       chu.w = dai;
-       chu.h = 35;
-       SDL_Surface *sur = TTF_RenderText_Solid(font, word.c_str(),col);
-       SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, sur);
-       SDL_RenderCopy(renderer, tex, NULL, &chu);
-       SDL_FreeSurface(sur);
-       SDL_DestroyTexture(tex);
-    }
-};
-// cho âm nhạc
-
-
-// main //
 int main(int argc, char* argv[])
 {
     initSDL(window, renderer);
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    Mix_VolumeMusic(59);
+    Mix_VolumeMusic(50);
     SDL_Event e;
 
     // tạo init ttf copy từ trang
@@ -271,7 +67,6 @@ while(true)
         effectmusic("assets/effect_sound.mp3");
         break;
     }
-// */
     SDL_RenderClear(renderer);
     texture = load_image("assets/bg.png",renderer);
     SDL_RenderCopy(renderer , texture, NULL, NULL);
@@ -313,8 +108,7 @@ while(true)
         if(e.type == SDL_KEYDOWN){
             switch (e.key.keysym.sym){
             case SDLK_SPACE:    box.change() ; break;
-            case SDLK_p: waitUntilKeyPressed(); break;
-            // ấn p để pause game
+            case SDLK_p: waitUntilKeyPressed(); break; // ấn p để pause game
             default: break;
             }
         }
@@ -342,7 +136,7 @@ while(true)
         cot1.x=-30;
         cot2.x=-200;
         cot3.x=-30;
-        pow.x=-1;
+        pow.x=-120;
     SDL_Delay(1000);
     SDL_RenderClear(renderer);
 }
