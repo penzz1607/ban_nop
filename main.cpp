@@ -1,6 +1,7 @@
 #include "SDL_utils.h"
 #include <Player.h>
 #include <Enemy.h>
+#include <Inuse.h>
 SDL_Window*window = NULL;
 SDL_Renderer*renderer = NULL;
 SDL_Texture* texture = NULL;

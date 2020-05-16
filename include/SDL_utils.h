@@ -21,7 +21,5 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer);
 void waitUntilKeyPressed();
 // copy của cô Trần Thị Minh Châu
 SDL_Texture* load_image(string file_path, SDL_Renderer* renderer);
-void effectmusic(string a);
-void backgrmusic();
-int kt_play(int kt);
+
 #endif // SDL_UTILS__H
