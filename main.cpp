@@ -1,4 +1,4 @@
-#include "SDL_utils.h"
+#include <SDL_utils.h>
 #include <Player.h>
 #include <Enemy.h>
 #include <Inuse.h>
@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 {
     initSDL(window, renderer);
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
-    Mix_VolumeMusic(50);
+    Mix_VolumeMusic(25);
     SDL_Event e;
 
     // tạo init ttf copy từ trang

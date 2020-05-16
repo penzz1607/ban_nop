@@ -46,18 +46,6 @@ struct Warn{
     Warn(){}
     void see(SDL_Renderer *renderer);
 };
-struct Text{
-    string word;
-    int x;
-    int y;
-    int dai;
-    Text (int _x, int _y, string _word, int _dai){
-        x=_x;
-        y=_y;
-        word=_word;
-        dai=_dai;
-    }
-    void render (SDL_Renderer* renderer, TTF_Font* font);
-};
+
 
 #endif // ENEMY_H

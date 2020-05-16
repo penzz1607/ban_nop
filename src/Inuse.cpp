@@ -1,4 +1,4 @@
-#include <SDL_utils.h>
+#include <Inuse.h>
 int kt_play(int kt1)
 {
     int kt= kt1;
@@ -23,4 +23,17 @@ void effectmusic(string a){
     Mix_Chunk* effect = NULL;
     effect = Mix_LoadWAV( a.c_str() );
     Mix_PlayChannel(-1,effect,0);
+}
+void Text::render (SDL_Renderer* renderer, TTF_Font* font){
+       SDL_Color col ={0,245,200,255};
+       SDL_Rect chu;
+       chu.x = x;
+       chu.y = y;
+       chu.w = dai;
+       chu.h = 30;
+       SDL_Surface *sur = TTF_RenderText_Solid(font, word.c_str(),col);
+       SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, sur);
+       SDL_RenderCopy(renderer, tex, NULL, &chu);
+       SDL_FreeSurface(sur);
+       SDL_DestroyTexture(tex);
 }
