@@ -1,36 +1,33 @@
 #include "Player.h"
-void Box::render(SDL_Renderer* renderer)
-{
-    SDL_Texture* player;
-    if(huong<0){
-        player= load_image("assets/player.png",renderer);
+
+bool Box::cham(int minx, int miny, int max_x, int maxy)
+    {
+        if(x>=minx && y>=miny && x<=max_x && y<=maxy) return false;
+        else return true;
     }
-    else player= load_image("assets/pd.png",renderer);
-    //if (player != NULL) cout <<"yes";
-    SDL_Rect hcn;
-    hcn.x = x;
-    hcn.y = y;
-    hcn.h = 30;
-    hcn.w = 30;
-    SDL_RenderCopy(renderer , player, NULL, &hcn);
-    SDL_DestroyTexture(player);
+void Box::render(SDL_Renderer *renderer)
+    {
+        SDL_Texture* hinh;
+        if(huong<0)
+        {
+              hinh = load_image("assets/pd.png",renderer);
+        }
+        else  hinh = load_image("assets/player.png",renderer);
+        SDL_Rect sun;
+        sun.x=x;
+        sun.y=y;
+        sun.w=30;
+        sun.h=30;
+        SDL_RenderCopy(renderer, hinh, NULL, &sun);
+        SDL_DestroyTexture(hinh);
     }
-bool Box:: inside(int minx, int miny, int maxx, int maxy){
-    return (minx<=x&&miny<=y&& x+30<=maxx&&y+30<=maxy);
-    }
-bool Box::cham (int min_x, int min_y, int max_x, int max_y){
-    if (x>=min_x&&x<=max_x&&y>=min_y&&y<=max_y){
-            return false;
-    }
-    else return true;
-}
-// lấy ý tưởng của hàm bool inside Trần Thị Minh Châu
 void Box::move()
-{
-    y += huong;
-    if(y<=0) y=SCREEN_HEIGHT-30;
-    else if((y+30)>=SCREEN_HEIGHT) y=0;
-}
-void Box::change(){
-    huong=huong*-1;
-}
+    {
+        y+=huong;
+        if(y<=0)        y=450;
+        else if(y>=450) y=0;
+    }
+void Box::change()
+    {
+        huong*=-1;
+    }

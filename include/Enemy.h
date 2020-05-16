@@ -17,6 +17,7 @@ struct Sun3 {
     x=_x;
     y=_y;
     }
+
     void move();
     void render(SDL_Renderer* renderer);
 };
@@ -27,9 +28,12 @@ struct Sun2 {
     x=_x;
     y=_y;
     }
+
     void move();
     void render(SDL_Renderer* renderer);
 };
+// người chơi
+
 struct Boss
 {
     int x; int y;
@@ -55,4 +59,5 @@ struct Text{
     }
     void render (SDL_Renderer* renderer, TTF_Font* font);
 };
+
 #endif // ENEMY_H

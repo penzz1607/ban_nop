@@ -2,19 +2,14 @@
 #define PLAYER_H
 #include <SDL_utils.h>
 
-struct Box{
+struct Box
+{
     int x;
     int y;
-    Box (int _x,int _y)
-    {
-        x=_x;
-        y=_y;
-    }
     int huong=-7;
-    void render(SDL_Renderer* renderer);
-    bool inside(int minx, int miny, int maxx, int maxy);
-    // kiểm tra xem có cham Sun hay không như thuật toán cửa cô Châu cho
-    bool cham (int min_x, int min_y, int max_x, int max_y);
+    Box(int _x,int _y):x(_x),y(_y){};
+    bool cham(int minx, int miny, int max_x, int maxy);
+    void render(SDL_Renderer *renderer);
     void move();
     void change();
 };

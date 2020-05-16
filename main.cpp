@@ -45,21 +45,21 @@ while(true)
 
     SDL_DestroyTexture(texture);
     // dieu kien cham cot1
-    if(box.cham(cot1.x, cot1.y, cot1.x+36, cot1.y+85)==false){
+   if(box.cham(cot1.x, cot1.y, cot1.x+36, cot1.y+85)==false){
         Mix_HaltMusic();
-        effectmusic("assets/effect_sound.mp3");
+       effectmusic("assets/effect_sound.mp3");
         break;
-    }
-//  dieu kien cham cot2
+        }
+////  dieu kien cham cot2
     if(box.cham(cot2.x, cot2.y, cot2.x+195, cot2.y+38)==false){
         Mix_HaltMusic();
         effectmusic("assets/effect_sound.mp3");
         break;
     }
-// dieu kien cham cot3
+//// dieu kien cham cot3
     if(box.cham(cot3.x, cot3.y, cot3.x+36, cot3.y+85)==false){
         Mix_HaltMusic();
-        effectmusic("assets/effect_sound.mp3");
+       effectmusic("assets/effect_sound.mp3");
         break;
     }
     if(box.cham(pow.x, pow.y, pow.x+195, pow.y+195)==false){

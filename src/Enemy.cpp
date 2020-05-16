@@ -1,4 +1,5 @@
 #include "Enemy.h"
+
 void Sun1::move(){
     x-=10;
     if(x<=-65){
@@ -8,9 +9,10 @@ void Sun1::move(){
             b=rand()%110;
         }
         y=b;
+        //  cout<<"1: "<<b<<" ";
     }
 }
-void  Sun1::render(SDL_Renderer* renderer){
+void Sun1::render(SDL_Renderer* renderer){
     SDL_Texture* hinh = load_image("assets/cot1.png",renderer);
     SDL_Rect sun;
     sun.x=x;
@@ -50,6 +52,7 @@ void Sun2::move(){
             a=rand()%400 ;
         }
         y=a;
+        //   cout<<"2: "<<a<<" ";
     }
 }
 void Sun2::render(SDL_Renderer* renderer){
@@ -83,19 +86,6 @@ void Boss::render(SDL_Renderer *renderer){
     SDL_RenderCopy(renderer, hinh, NULL, &su);
     SDL_DestroyTexture(hinh);
 }
-void Text::render (SDL_Renderer* renderer, TTF_Font* font){
-    SDL_Color col ={0, 255, 0 ,255};
-    SDL_Rect chu;
-    chu.x = x;
-    chu.y = y;
-    chu.w = dai;
-    chu.h = 35;
-    SDL_Surface *sur = TTF_RenderText_Solid(font, word.c_str(),col);
-    SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, sur);
-    SDL_RenderCopy(renderer, tex, NULL, &chu);
-    SDL_FreeSurface(sur);
-    SDL_DestroyTexture(tex);
-}
 void Warn::see(SDL_Renderer *renderer){
     SDL_Texture* hinh = load_image("assets/warn.png",renderer);
     SDL_Rect su;
@@ -106,3 +96,16 @@ void Warn::see(SDL_Renderer *renderer){
     SDL_RenderCopy(renderer, hinh, NULL, &su);
     SDL_DestroyTexture(hinh);
 }
+void Text::render (SDL_Renderer* renderer, TTF_Font* font){
+       SDL_Color col ={243, 156, 18 ,255};
+       SDL_Rect chu;
+       chu.x = x;
+       chu.y = y;
+       chu.w = dai;
+       chu.h = 30;
+       SDL_Surface *sur = TTF_RenderText_Solid(font, word.c_str(),col);
+       SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, sur);
+       SDL_RenderCopy(renderer, tex, NULL, &chu);
+       SDL_FreeSurface(sur);
+       SDL_DestroyTexture(tex);
+    }
